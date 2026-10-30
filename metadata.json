@@ -1,0 +1,6 @@
+{
+  "name": "Radar Vibz",
+  "description": "Sistema de inteligência e monitoramento de oportunidades do Instagram para o Vibz Eventos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

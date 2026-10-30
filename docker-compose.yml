@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: radar_vibz_postgres
+    restart: always
+    environment:
+      POSTGRES_USER: vibz_user
+      POSTGRES_PASSWORD: vibz_password
+      POSTGRES_DB: radar_vibz
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    container_name: radar_vibz_backend
+    restart: always
+    environment:
+      DATABASE_URL: postgresql://vibz_user:vibz_password@db:5432/radar_vibz
+      GEMINI_API_KEY: ${GEMINI_API_KEY}
+      META_ACCESS_TOKEN: ${META_ACCESS_TOKEN}
+      META_PAGE_ID: ${META_PAGE_ID}
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      TELEGRAM_CHAT_ID: ${TELEGRAM_CHAT_ID}
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: radar_vibz_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  postgres_data:
